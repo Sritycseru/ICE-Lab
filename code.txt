@@ -1,0 +1,349 @@
+%Unipolar NRZ
+% 0 ->0
+% 1 ->1
+
+clc;
+clear all;
+close all;
+data=[1 0 0 1 0 1 0];
+point=100;
+ln=length(data);
+%Encoded
+encoded_signal=zeros(1,ln*point);
+for i=1:ln
+    if data(i)==1
+        encoded_signal((i-1)*point+1:i*point)=1;
+    end
+end
+size=0:1/point:ln-1/point;
+%subplot(1,1,1);
+plot(size,encoded_signal);
+ylim([-3,3]);
+%Decoded
+decoded_signal=zeros(1,ln)
+for i=1:ln 
+    if encoded_signal(i*point)==1
+        decoded_signal(i)=1;
+    end
+end
+decoded_signal
+
+
+
+% NRZ_L
+% 0 ->1
+% 1 ->-1
+
+clc;
+clear all;
+close all;
+data=[1 0 0 1 1 1 0];
+point=100;
+ln=length(data);
+%Encoded
+encoded_signal=zeros(1,ln*point);
+for i=1:ln
+    if data(i)==0
+        encoded_signal((i-1)*point+1:i*point)=1;
+    else
+       encoded_signal((i-1)*point+1:i*point)=-1; 
+    end
+end
+size=0:1/point:ln-1/point;
+%subplot(1,1,1);
+plot(size,encoded_signal);
+ylim([-3,3]);
+%Decoded
+decoded_signal=zeros(1,ln)
+for i=1:ln 
+    if encoded_signal(i*point)==-1
+        decoded_signal(i)=1;
+    end
+end
+decoded_signal
+
+
+% NRZ_I
+% 0 ->1
+% 1 ->-1
+
+clc;
+clear all;
+close all;
+data=[0 1 0 1 1 0 0 1];
+point=100;
+ln=length(data);
+%Encoded
+encoded_signal=zeros(1,ln*point);
+status=1;
+for i=1:ln
+    if data(i)==1
+      status=-status;
+    end
+       encoded_signal((i-1)*point+1:i*point)=status; 
+end
+size=0:1/point:ln-1/point;
+%subplot(1,1,1);
+plot(size,encoded_signal);
+ylim([-3,3]);
+%Decoded
+
+%same as betore->0
+%alternate->1
+decoded_signal=zeros(1,ln);
+status=1;
+for i=1:ln 
+    if encoded_signal(i*point)~=status
+        decoded_signal(i)=1;
+        status=-status;
+    end
+        
+end
+decoded_signal
+%AMI
+% 0->zero voltage
+% 1->alternate
+clc;
+clear all;
+close all;
+data=[0 1 0 1 1 0 0 1];
+point=100;
+ln=length(data);
+%Encoded
+encoded_signal=zeros(1,ln*point);
+status=1;
+for i=1:ln
+    if data(i)==1
+       encoded_signal((i-1)*point+1:i*point)=status; 
+       status=-status;
+    end
+end
+size=0:1/point:ln-1/point;
+%subplot(1,1,1);
+plot(size,encoded_signal);
+ylim([-3,3]);
+%Decoded
+
+%same as betore->0
+%alternate->1
+decoded_signal=zeros(1,ln);
+status=1;
+for i=1:ln 
+    if encoded_signal(i*point)~=0
+        decoded_signal(i)=1;
+      %jodi zero na hoi taholei 1;
+    end
+        
+end
+decoded_signal
+
+
+%POlar_RZ
+% 0-> -1 to 0 
+% 1-> 1 to 0
+clc;
+clear all;
+close all;
+data=[0 1 0 1 1 0 0 1];
+point=100;
+ln=length(data);
+%Encoded
+encoded_signal=zeros(1,ln*point);
+status=1;
+for i=1:ln
+    if data(i)==0
+       for j=1:point/2
+            encoded_signal((i-1)*point+j)=-1;
+       end
+        for j=point/2+1:point
+           encoded_signal((i-1)*point+j)=0; 
+        end
+    else
+        for j=1:point/2
+            encoded_signal((i-1)*point+j)=1;
+       end
+        for j=point/2+1:point
+           encoded_signal((i-1)*point+j)=0; 
+        end
+        
+    end
+end
+size=0:1/point:ln-1/point;
+%subplot(1,1,1);
+plot(size,encoded_signal);
+ylim([-3,3]);
+%Decoded
+
+%encoded signal(i*point)=-1 -> 0
+%encoded signal(i*point)=1 -> 1
+decoded_signal=zeros(1,ln);
+status=1;
+for i=1:ln 
+    if encoded_signal((i-1)*point+1)==1
+        decoded_signal(i)=1;
+      %1 pailei 1;
+    end
+        
+end
+decoded_signal
+
+%Manchester
+% 0-> +1 to -1 
+% 1-> -1 to +1
+
+clc;
+clear all;
+close all;
+data=[1 1 1 0 0 1 1];
+point=100;
+ln=length(data);
+
+
+encoded_signal=zeros(1,ln*point);
+for i=1:ln
+    if data(i)==0
+        for j=1:point/2
+            encoded_signal((i-1)*point+j)=1;
+        end
+        for j=point/2+1:point
+            encoded_signal((i-1)*point+j)=-1;
+        end
+    else 
+        for j=1:point/2
+            encoded_signal((i-1)*point+j)=-1;
+        end
+        for j=point/2+1:point
+            encoded_signal((i-1)*point+j)=1;
+        end
+    end
+end
+
+        
+size=0:1/point:ln-1/point;
+%subplot(2,1,1);
+plot(size,encoded_signal);
+ylim([-3,3]);
+%Decoded
+
+%encoded signal(i*point)=-1 -> 0
+%encoded signal(i*point)=1 -> 1
+decoded_signal=zeros(1,ln);
+status=1;
+for i=1:ln 
+    if encoded_signal((i-1)*point+1)~=1
+        decoded_signal(i)=1;
+      %1 na pailei 1;
+    end
+        
+end
+decoded_signal
+ 
+%Differential Manchester
+%0 -> transition
+%1 -> no transition
+
+clc;
+clear all;
+close all;
+data=[1 1 1 0 0 1 1];
+point=100;
+ln=length(data);
+status=1;
+
+
+encoded_signal=zeros(1,ln*point);
+for i=1:ln
+    if data(i)==0
+        for j=1:point/2
+            encoded_signal((i-1)*point+j)=-status;
+        end
+        for j=point/2+1:point
+            encoded_signal((i-1)*point+j)=status;
+        end
+    else 
+        for j=1:point/2
+            encoded_signal((i-1)*point+j)=status;
+        end
+        for j=point/2+1:point
+            encoded_signal((i-1)*point+j)=-status;
+        end
+        status=-status
+    end
+end
+
+        
+size=0:1/point:ln-1/point;
+%subplot(2,1,1);
+plot(size,encoded_signal);
+ylim([-3,3]);
+%Decoded
+
+%encoded signal(i*point)=-1 -> 0
+%encoded signal(i*point)=1 -> 1
+decoded_signal=zeros(1,ln);
+status=1;
+for i=1:ln 
+    if encoded_signal(i*point)~=status
+        decoded_signal(i)=1;
+        status=-status
+      %1 na pailei 1;
+    end
+        
+end
+decoded_signal
+
+
+%MULTI-3
+%Encoded_Signal
+%previous one : negative
+% 0 -> same as before
+% 1 -> +1,0,-1/-1,0,+1.
+clc;
+clear all;
+close all;
+data = [0 1 0 1 1 0 1 1];
+point = 100;
+flag = [1 0 -1 0];
+status = 0;
+index = 1;
+encoded_signal = zeros(1,length(data)*point);
+for i=1:length(data)
+    if data(i) == 1
+        status = flag(index)
+        encoded_signal((i-1)*point+1:i*point) = status;
+        index = mod(index,4)+1;
+    else
+        encoded_signal((i-1)*point+1:i*point) = status;
+    end
+    
+end
+
+size = 0:1/point:length(data)-1/point;
+
+subplot(2,1,1);
+plot(size,encoded_signal);
+title('Encoded Signal');
+ylim([-3,3]);
+
+%Decoded_Signal
+%status same -> 0
+%status change -> 1
+
+status = 0;
+decoded_signal = zeros(1,length(data));
+for i=1:length(data)
+    if encoded_signal(i*point)==status
+           decoded_signal(i) = 0;
+    else
+        decoded_signal(i) = 1;
+        status = encoded_signal(i*point);
+    end
+end
+    
+decoded_signal
+        
+        
+
+        
+        
+        
