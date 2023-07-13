@@ -30,18 +30,15 @@ plot(time, modulation);
 axis([0 end_time -2*a 2*a]);
 grid on;
 
+
 % Demodulation
-index = 1;
+demodulation = zeros(1,length(bits))
 
-for i = 1:size(modulation)
-    if (modulation(i) ~= 0)
-        demodultaion(index) = 1;
-    else
-        demodultaion(index) = 0;
-    end
-    if (time(i)*bitrate)>= index
-        index = index+1;
-    end
-    end
+for i = 1:length(bits)
+   modulation((i-1)*sampling_rate+1)
+   if modulation((i-1)*sampling_rate+10) ~= 0
+        demodulation(i) = 1;
+   end
+end
 
-disp(demodultaion);
+demodulation
